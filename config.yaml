@@ -1,0 +1,95 @@
+# Sondr ICP Finder — Configuration
+# Edit this file to add regions, categories, exclusions, and tune scoring weights.
+
+search:
+  api_key: ""   # leave blank — set SERPER_API_KEY in .env instead
+  results_per_query: 10            # number of search results to pull per query
+
+regions:
+  - "Hawaii"
+  - "Boise, ID"
+  - "Spokane, WA"
+  - "Salt Lake City, UT"
+  - "Denver, CO"
+  - "Reno, NV"
+  - "Albuquerque, NM"
+
+category_terms:
+  - "food distributor"
+  - "wholesale food distribution"
+  - "Asian food distributor"
+  - "Latin food distributor"
+  - "Halal food wholesale"
+  - "Mediterranean food distributor"
+  - "Indian grocery distributor"
+  - "restaurant food supplier"
+  - "produce distributor"
+  - "Caribbean food distributor"
+  - "specialty food distributor"
+
+# Domains to strip from search results before fetching
+exclude_domains:
+  - zoominfo.com
+  - linkedin.com
+  - yelp.com
+  - bbb.org
+  - yellowpages.com
+  - manta.com
+  - dnb.com
+  - bloomberg.com
+  - crunchbase.com
+  - bizbuysell.com
+  - chamberofcommerce.com
+  - alignable.com
+  - facebook.com
+  - instagram.com
+  - twitter.com
+  - tiktok.com
+  - sysco.com
+  - usfoods.com
+  - pfgc.com
+  - goldenstate.com
+  - webstaurantstore.com
+  - restaurantdepot.com
+  - foodservicedirect.com
+  - amazon.com
+  - wikipedia.org
+  - bizjournals.com
+  - hoovers.com
+  - data.com
+
+# National / large chain distributor brand keywords — sites containing these are hard-excluded
+national_brand_keywords:
+  - "sysco"
+  - "us foods"
+  - "performance food group"
+  - "gordon food service"
+  - "reinhart foodservice"
+  - "dot foods"
+  - "mclane"
+
+# Scoring weights (must sum to 100 for a perfect score)
+scoring:
+  outdated_cms_no_ssl_no_viewport: 30   # WordPress/old CMS, no HTTPS, or no mobile meta tag
+  stale_copyright_year: 15              # copyright year 2+ years behind current
+  thin_content_no_catalog: 15           # low word count and no online ordering
+  founding_year_15_plus: 15            # "since 19XX" or "founded XX+ years ago"
+  family_founder_language: 10           # "family owned", "founded by", generational mentions
+  named_owner_contact: 15              # specific person name + title found (not just info@)
+
+# Hard-exclude triggers (any match → score = 0, moved to review queue)
+hard_exclude_signals:
+  - has_modern_framework        # React, Vue, Next.js, etc. detected
+  - is_national_brand           # matched national_brand_keywords above
+  - is_dtc_ecommerce            # has shopping cart / "add to cart" / checkout flow
+
+output:
+  max_leads: 30                 # cap on ranked leads per run
+  leads_file: "leads.csv"
+  review_file: "review_queue.csv"
+
+fetch:
+  request_delay_seconds: 1.5   # pause between site requests
+  timeout_seconds: 15
+  user_agent: "Mozilla/5.0 (compatible; SondrLeadFinder/1.0)"
+  max_pages_per_site: 4        # homepage + up to 3 subpages (about, contact, team)
